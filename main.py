@@ -9,6 +9,10 @@ class JobRequest(BaseModel):
     title: str
     company:str
 
+def title_check(job):
+    if not job.title:
+        return {"Error": "Title is required!"}
+    
 @app.get("/history")
 def get_history():
     return history
@@ -20,6 +24,8 @@ def home():
 # POST Analysis
 @app.post("/analyze")
 def analyze_post(job: JobRequest):
+    if not job.title:
+        return {"Error": "Title is required!"}
     result = analyze_jobFake(job.model_dump())
 
     history.append({
@@ -28,7 +34,7 @@ def analyze_post(job: JobRequest):
     })
     return {"analysis": result}
 
-# GET Analysis
+# GET Analysis FAKE
 @app.get("/analyze")
 def analyze(title: str, company: str):
 
@@ -36,14 +42,13 @@ def analyze(title: str, company: str):
         "title": title,
         "company": company
     }
-
     result = analyze_jobFake(job)
 
     return{
         "analysis": result
     }
 
-# Analyze using AI
+# GET Analysis using AI
 @app.get("/analyzeAI")
 def analyze(title: str, company: str):
 
@@ -51,7 +56,7 @@ def analyze(title: str, company: str):
         "title": title,
         "company": company
     }
-
+    title_check(job)
     result = analyze_job(job)
 
     return{
