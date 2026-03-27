@@ -4,7 +4,7 @@ from config import API_KEY
 
 client = OpenAI(api_key = API_KEY)
 
-def analyzer(job):
+def analyze_job(job):
     prompt = f"""
     Analyze this job:
 
@@ -28,3 +28,10 @@ def analyzer(job):
     except RateLimitError:
         print("Rate limit exceeded!")
         return
+    
+def analyze_jobFake(job):
+    # Fake AI Function Result 
+    return f"""
+    Summary: This is a {job['title']} role at {job['company']}.
+    Skills: Skills
+    Level: Junior/Mid/Senior"""
